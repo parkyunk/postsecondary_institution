@@ -1,0 +1,94 @@
+---
+title: "What should you expect from the post-secondary institution?"
+author: 
+  - Yunkyung Park
+thanks: "Code and data are available at: https://github.com/parkyunk/postsecondary_institution."
+date: "`r format(Sys.time(), '%d %B %Y')`"
+abstract: "Four sentences"
+output:
+  bookdown::pdf_document2
+toc: FALSE
+bibliography: references.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r library, echo=FALSE, message=FALSE}
+# install.packages('bookdown')
+# install.packages("stringr")
+library(stringr) 
+library(dplyr)
+library(tidyverse) 
+library(janitor)
+library(ggplot2)
+library(knitr)
+library(kableExtra)
+library(bookdown)
+```
+
+```{r readdata, echo=FALSE}
+ngs<-read_csv('ngs2018.csv', show_col_types = FALSE)
+```
+
+# Introduction
+
+# Data
+
+## Key features
+
+The raw data includes 125 variables that were derived from the questionnaire. As mentioned above, some key features include classification variables including age, sex, marital status, income, and core contents such as financial giving, the total amount of donations, etc. The dataset is processed and analyzed using 'R' [@citeR] mainly with the 'tidyverse' [@citetidyverse] and 'dplyr' [@citedplyr] packages. The package 'janitor' [@citejanitor] is used to clean data, and the graphs and the tables are created in 'ggplot2' [@citeggplot2] and 'kableExtra' [@citekableExtra], respectively. The package 'stringr' [@citestringr] is used to manipulate the character string. The packages 'bookdown' [@citebookdown] and 'knitr' [@citeknitr] are used in generating the R Markdown report. Table \@ref(tab:data) created using 'kableExtra' [@citekableExtra] shows a subset of key features that will be discussed in this paper.
+
+```{r data, echo=FALSE}
+ngs %>%
+  select(age_at_grd, gender, lev_of_study, program, time_until_first_job) %>%
+  slice(1:10) %>%
+  kable(caption='A subset of key features',
+        col.names = c('Age at graduation', 'Gender', 'Level of study', 
+                      'Program', 'Length of time until first job after graduation'),
+        digits = 1,
+        booktabs = FALSE,
+        linesep = "")
+```
+
+### Age at graduation
+
+```{r age, echo=FALSE, fig.cap='Distribution of age groups (at the time graduation) and gender in the 2018 NGS survey'}
+age <-
+  ngs %>%
+  mutate(age_at_grd = 
+           case_when(age_at_grd == "Less than 25" ~ "<25",
+                     age_at_grd == "25 to 29" ~ "25-29",
+                     age_at_grd == "30 to 39" ~ "30-39",
+                     age_at_grd == "40 or more" ~ ">=40"
+                     ),
+         age_at_grd = factor(age_at_grd,
+                            levels = c("<25",
+                                       "25-29",
+                                       "30-39",
+                                       ">=40"
+                                       )
+                            )
+         )
+
+age %>%
+  ggplot(mapping=aes(x=age_at_grd, fill=gender)) +
+  geom_bar(position = "dodge") +
+  theme_minimal() +
+  labs(x='Age-group of respondent', y='Number of respondents', 
+       fill='Gender')
+```
+
+Figure \@ref(fig:age) shows the distribution of the age-group at the time of graduation. Note that the survey was conducted in 2018 on the Class of 2015, so by the time the survey was completed, we can expect that the age distribution of the survey would be slightly different. Also, we can see that more female graduated from post-secondary institution. Since it is only conducted to the ones who graduated, it does not tell that female tends to go to post-secondary institution more than male. The drop-out rate 
+
+# Model
+y = time_until_first_job
+
+x_1 = lev_of_study (Bacher's / Master's / ...)
+x_2 = program (math / design / ...)
+x_3 = participated_co_op
+x_4 = grade (A+, ...)
+
+# Results
+

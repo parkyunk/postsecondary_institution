@@ -1,0 +1,568 @@
+*******************************************************************
+*  Stata "do-file" file with labels and missing data specifications
+*  Created by ddltox on Mar 26, 2022  (Sat 01:08 PM EDT)
+*  DDL source file: "/web/sda.artsci.utoronto.ca/htdocs/sdaweb/tmpdir/AAatoITN.txt".
+*
+*  Note that the data dictionary is given at the end of this file.
+*  Put the dictionary into a separate file (by editing this file).
+*  Then specify below the name of the dictionary file.
+*
+*  DDL file gives the following dataset description:
+*    Records per case: 1
+*    Record length:    277
+*******************************************************************
+
+
+label data "2018 National Graduates Survey (Class of 2015)"
+
+#delimit ;
+label define aft_020   1 "Already working at a job or business" 
+                       2 "Less than 6 months" 
+                       3 "6 months to less than 12 months" 
+                       4 "1 year to less than 2 years" 5 "2 years or more" 
+                       6 "Valid skip" 7 "Don't know" 8 "Refusal" 
+                       9 "Not stated" ;
+label define aft_050   1 "Full time" 2 "Part time" 6 "Valid skip" 
+                       7 "Don't know" 8 "Refusal" 9 "Not stated" ;
+label define aft_070   1 "Permanent" 2 "Not permanent" 6 "Valid skip" 
+                       7 "Don't know" 8 "Refusal" 9 "Not stated" ;
+label define aft_080   1 "Seasonal job" 2 "Temporary, term or contract job" 
+                       3 "Casual job" 4 "Other" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define aft_090   1 "Closely related" 2 "Somewhat related" 
+                       3 "Not at all related" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define bef_160   1 "None" 2 "Less than 12 months" 
+                       3 "12 months to less than 24 months" 
+                       4 "24 months to less than 36 months" 
+                       5 "36 months to less than 48 months" 
+                       6 "48 months or more" 96 "Valid skip" 97 "Don't know" 
+                       98 "Refusal" 99 "Not stated" ;
+label define aft_p010  0 "0" 1 "1" 2 "2" 3 "3" 4 "4" 5 "5 or more" 
+                       6 "Valid skip" 7 "Don't know" 8 "Refusal" 
+                       9 "Not stated" ;
+label define aft_p040  1 "Employee" 
+                       2 "Self-employed / Working in a family business without pay" 
+                       6 "Valid skip" 7 "Don't know" 8 "Refusal" 
+                       9 "Not stated" ;
+label define bef_p140  1 "Working at a job or business" 2 "Looking for work" 
+                       3 "Going to school" 4 "Personal" 5 "Other" 
+                       6 "Valid skip" 7 "Don't know" 8 "Refusal" 
+                       9 "Not stated" ;
+label define bef_p150  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define certlevp  1 "College" 2 "Bachelor's" 3 "Master's / Doctorate" 
+                       6 "Valid skip" 7 "Don't know" 8 "Refusal" 
+                       9 "Not stated" ;
+label define coop      1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define ctzshipp  1 "Canadian citizen by birth" 
+                       2 "Canadian citizen by naturalization" 
+                       3 "Landed immigrant" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define dbtalgrd  0 "$0" 1 "Less than $5,000" 
+                       2 "$5,000 to less than $10,000" 
+                       3 "$10,000 to less than $25,000" 4 "$25,000 or more" 
+                       6 "Valid skip" 7 "Don't know" 8 "Refusal" 
+                       9 "Not stated" ;
+label define dbtalint  0 "$0" 1 "Less than $5,000" 
+                       2 "$5,000 to less than $10,000" 
+                       3 "$10,000 to less than $25,000" 4 "$25,000 or more" 
+                       6 "Valid skip" 7 "Don't know" 8 "Refusal" 
+                       9 "Not stated" ;
+label define dbtotgrd  0 "$0" 1 "Less than $5,000" 
+                       2 "$5,000 to less than $10,000" 
+                       3 "$10,000 to less than $25,000" 4 "$25,000 or more" 
+                       6 "Valid skip" 7 "Don't know" 8 "Refusal" 
+                       9 "Not stated" ;
+label define dbtotint  0 "$0" 1 "Less than $5,000" 
+                       2 "$5,000 to less than $10,000" 
+                       3 "$10,000 to less than $25,000" 4 "$25,000 or more" 
+                       6 "Valid skip" 7 "Don't know" 8 "Refusal" 
+                       9 "Not stated" ;
+label define dclassp   0 "Does not have a disability" 1 "Mild" 2 "Moderate" 
+                       3 "Severe / Very severe" 4 "Unknown severity" 
+                       6 "Valid skip" 7 "Don't know" 8 "Refusal" 
+                       9 "Not stated" ;
+label define ddis_fl   1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define dem_p010  1 "Married / Living common law" 
+                       2 "Single / Widowed / Separated / Divorced" 
+                       6 "Valid skip" 7 "Don't know" 8 "Refusal" 
+                       9 "Not stated" ;
+label define dem_p030  0 "0" 1 "1" 2 "2" 3 "3 or more" 6 "Valid skip" 
+                       7 "Don't know" 8 "Refusal" 9 "Not stated" ;
+label define dem_p140  1 "English only" 2 "French only" 
+                       3 "Both English and French" 6 "Valid skip" 
+                       7 "Don't know" 8 "Refusal" 9 "Not stated" ;
+label define dtyperp   0 "No disability" 1 "One disability type" 
+                       2 "Two or three disability types" 
+                       3 "More than three disability types" 6 "Valid skip" 
+                       7 "Don't know" 8 "Refusal" 9 "Not stated" ;
+label define fatedgrd  
+                       1 "Graduates level of education was higher than fathers" 
+                       2 "Graduates level of education was the same as fathers" 
+                       3 "Graduates level of education was lower than fathers" 
+                       6 "Valid skip" 7 "Don't know" 8 "Refusal" 
+                       9 "Not stated" ;
+label define fatedint  
+                       1 "Graduates level of education was higher than fathers" 
+                       2 "Graduates level of education was the same as fathers" 
+                       3 "Graduates level of education was lower than fathers" 
+                       6 "Valid skip" 7 "Don't know" 8 "Refusal" 
+                       9 "Not stated" ;
+label define fathedp   1 "Less than high school diploma or its equivalent" 
+                       2 "High school diploma or a high school equivalency certificate" 
+                       3 "Trade certificate or diploma" 
+                       4 "College/CEGEP/Other non-university certificate or diploma" 
+                       5 "University below Bachelor's / Bachelor's" 
+                       6 "University above the Bachelor's / Master's / Doctorate" 
+                       96 "Valid skip" 97 "Don't know" 98 "Refusal" 
+                       99 "Not stated" ;
+label define gradagep  1 "Less than 25" 2 "25 to 29" 3 "30 to 39" 
+                       4 "40 or more" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define hlosgrdp  1 "College" 2 "Bachelor's" 3 "Master's / Doctorate" 
+                       6 "Valid skip" 7 "Don't know" 8 "Refusal" 
+                       9 "Not stated" ;
+label define hlosintp  1 "College" 2 "Bachelor's" 3 "Master's / Doctorate" 
+                       6 "Valid skip" 7 "Don't know" 8 "Refusal" 
+                       9 "Not stated" ;
+label define jobincp   1 "Less than $10,000" 2 "$10,000 to $19,999" 
+                       3 "$20,000 to $29,999" 4 "$30,000 to $39,999" 
+                       5 "$40,000 to $49,999" 6 "$50,000 to $59,999" 
+                       7 "$60,000 to $69,999" 8 "$70,000 to $79,999" 
+                       9 "$80,000 to $89,999" 10 "$90,000 or more" 
+                       96 "Valid skip" 97 "Don't know" 98 "Refusal" 
+                       99 "Not stated" ;
+label define jobqlevp  0 "Other" 1 "College" 2 "Bachelor's" 
+                       3 "Master's / Doctorate" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define jobqlgrd  0 "No education requirements specified" 
+                       1 "Respondent has more than required" 
+                       2 "Respondent has same as required" 
+                       3 "Respondent has less than required" 6 "Valid skip" 
+                       7 "Don't know" 8 "Refusal" 9 "Not stated" ;
+label define jobqlint  0 "No education requirements specified" 
+                       1 "Respondent has more than required" 
+                       2 "Respondent has same as required" 
+                       3 "Respondent has less than required" 6 "Valid skip" 
+                       7 "Don't know" 8 "Refusal" 9 "Not stated" ;
+label define lfcoccp   1 "Management occupations" 
+                       2 "Business, finance and administration occupations" 
+                       3 "Natural and applied sciences and related occupations" 
+                       4 "Health occupations" 
+                       5 "Occupations,education,law,social,community and gov services" 
+                       6 "Occupations in art, culture, recreation and sport" 
+                       7 "Sales and service occupations" 
+                       8 "Trades,transport,equipment operators and related occupations" 
+                       9 "Natural resources, agriculture, related production, manufact" 
+                       96 "Valid skip" 97 "Don't know" 98 "Refusal" 
+                       99 "Not stated" ;
+label define lfirstp   1 "English only" 2 "French only" 3 "Other only" 
+                       4 "English and French only" 5 "None of the above" 
+                       6 "Valid skip" 7 "Don't know" 8 "Refusal" 
+                       9 "Not stated" ;
+label define lfstat    1 "Employed" 2 "Unemployed" 
+                       3 "Not in the labour force" 6 "Valid skip" 
+                       7 "Don't know" 8 "Refusal" 9 "Not stated" ;
+label define lfwftpt1  1 "Full-time (30 hours or more)" 
+                       2 "Part-time (29 hours or less)" 6 "Valid skip" 
+                       7 "Don't know" 8 "Refusal" 9 "Not stated" ;
+label define lfw_p020  1 "Full-time student" 2 "Part-time student" 
+                       6 "Valid skip" 7 "Don't know" 8 "Refusal" 
+                       9 "Not stated" ;
+label define lfw_p140  1 "Employee" 
+                       2 "Self-employed / Working in a family business without pay" 
+                       6 "Valid skip" 7 "Don't know" 8 "Refusal" 
+                       9 "Not stated" ;
+label define lhomep    1 "English only" 2 "French only" 3 "Other only" 
+                       4 "English and French only" 5 "None of the above" 
+                       6 "Valid skip" 7 "Don't know" 8 "Refusal" 
+                       9 "Not stated" ;
+label define motedgrd  
+                       1 "Graduates level of education was higher than mothers" 
+                       2 "Graduates level of education was the same as mothers" 
+                       3 "Graduates level of education was lower than mothers" 
+                       6 "Valid skip" 7 "Don't know" 8 "Refusal" 
+                       9 "Not stated" ;
+label define motedint  
+                       1 "Graduates level of education was higher than mothers" 
+                       2 "Graduates level of education was the same as mothers" 
+                       3 "Graduates level of education was lower than mothers" 
+                       6 "Valid skip" 7 "Don't know" 8 "Refusal" 
+                       9 "Not stated" ;
+label define mothedp   1 "Less than high school diploma or its equivalent" 
+                       2 "High school diploma or a high school equivalency certificate" 
+                       3 "Trade certificate or diploma" 
+                       4 "College/CEGEP/Other non-university certificate or diploma" 
+                       5 "University below Bachelor's / Bachelor's" 
+                       6 "University above the Bachelor's / Master's / Doctorate" 
+                       96 "Valid skip" 97 "Don't know" 98 "Refusal" 
+                       99 "Not stated" ;
+label define owegvin   0 "$0" 1 "Less than $5,000" 
+                       2 "$5,000 to less than $10,000" 
+                       3 "$10,000 to less than $25,000" 4 "$25,000 or more" 
+                       6 "Valid skip" 7 "Don't know" 8 "Refusal" 
+                       9 "Not stated" ;
+label define oweslgd   0 "$0" 1 "Less than $5,000" 
+                       2 "$5,000 to less than $10,000" 
+                       3 "$10,000 to less than $25,000" 4 "$25,000 or more" 
+                       6 "Valid skip" 7 "Don't know" 8 "Refusal" 
+                       9 "Not stated" ;
+label define persincp  1 "Less than $10,000" 2 "$10,000 to $19,999" 
+                       3 "$20,000 to $29,999" 4 "$30,000 to $39,999" 
+                       5 "$40,000 to $49,999" 6 "$50,000 to $59,999" 
+                       7 "$60,000 to $69,999" 8 "$70,000 to $79,999" 
+                       9 "$80,000 to $89,999" 10 "$90,000 or more" 
+                       96 "Valid skip" 97 "Don't know" 98 "Refusal" 
+                       99 "Not stated" ;
+label define pgmcipap  1 "Education" 
+                       2 "Visual and performing arts, and communications technologies" 
+                       3 "Humanities" 
+                       4 "Social and behavioural sciences and law" 
+                       5 "Business, management and public administration" 
+                       6 "Physical and life sciences and technologies" 
+                       7 "Mathematics, computer and information sciences" 
+                       8 "Architecture, engineering, and related technologies" 
+                       9 "Agriculture, natural resources and conservation" 
+                       10 "Other" 96 "Valid skip" 97 "Don't know" 
+                       98 "Refusal" 99 "Not stated" ;
+label define pgm_p036  1 "Had a job" 2 "Financial reason" 
+                       3 "Program not offered full time or in my region" 
+                       4 "Personal reasons" 5 "Other" 6 "Valid skip" 
+                       7 "Don't know" 8 "Refusal" 9 "Not stated" ;
+label define pgm_p400  1 "None" 2 "Less than half" 3 "Half or more" 
+                       6 "Valid skip" 7 "Don't know" 8 "Refusal" 
+                       9 "Not stated" ;
+label define pgm_p405  1 "A+, A, A-" 2 "B+, B, B-" 3 "C+, C, C-, D+, D, D-" 
+                       4 "No grade assigned" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define prevlevp  0 "Other" 1 "College" 2 "Bachelor's" 
+                       3 "Master's / Doctorate" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define pumfid    99996 "Valid skip" 99997 "Don't know" 99998 "Refusal" 
+                       99999 "Not stated" ;
+label define reg_inst  1 "Atlantic provinces" 2 "Quebec" 3 "Ontario" 
+                       4 "Western provinces, territories" 6 "Valid skip" 
+                       7 "Don't know" 8 "Refusal" 9 "Not stated" ;
+label define reg_resp  1 "Atlantic provinces" 2 "Quebec" 3 "Ontario" 
+                       4 "Western provinces, territories" 6 "Valid skip" 
+                       7 "Don't know" 8 "Refusal" 9 "Not stated" ;
+label define resp      0 "$0" 1 "Less than $5,000" 
+                       2 "$5,000 to less than $10,000" 
+                       3 "$10,000 to less than $25,000" 4 "$25,000 or more" 
+                       6 "Valid skip" 7 "Don't know" 8 "Refusal" 
+                       9 "Not stated" ;
+label define scholar   0 "$0" 1 "Less than $5,000" 
+                       2 "$5,000 to less than $10,000" 
+                       3 "$10,000 to less than $25,000" 4 "$25,000 or more" 
+                       6 "Valid skip" 7 "Don't know" 8 "Refusal" 
+                       9 "Not stated" ;
+label define srcfund   1 "One source of funding" 2 "Two sources of funding" 
+                       3 "Three or more sources of funding" 6 "Valid skip" 
+                       7 "Don't know" 8 "Refusal" 9 "Not stated" ;
+label define stlp160n  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define stlp170n  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define stuloans  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define visbminp  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define wtpf      9999999.9996 "Valid skip" 9999999.9997 "Don't know" 
+                       9999999.9998 "Refusal" 9999999.9999 "Not stated" ;
+label define edu_010   1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define edu_020   1 "One" 2 "Two" 3 "Three or more" 6 "Valid skip" 
+                       7 "Don't know" 8 "Refusal" 9 "Not stated" ;
+label define lfw_010   1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define lfw_120   1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define lfw_270   1 "Permanent" 2 "Not permanent" 6 "Valid skip" 
+                       7 "Don't know" 8 "Refusal" 9 "Not stated" ;
+label define lfw_280   1 "Seasonal job" 2 "Temporary, term or contract job" 
+                       3 "Casual job" 4 "Other" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define lfw_370   1 "Job ad" 2 "Direct contact with employer" 
+                       3 "Through school" 4 "Employment agency" 
+                       5 "Networking event or job fair" 6 "Family" 
+                       7 "Friends" 8 "Other" 96 "Valid skip" 97 "Don't know" 
+                       98 "Refusal" 99 "Not stated" ;
+label define lfw_400   1 "Closely related" 2 "Somewhat related" 
+                       3 "Not at all related" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define lfw_410   1 "Overqualified" 2 "Qualified" 3 "Underqualified" 
+                       6 "Valid skip" 7 "Don't know" 8 "Refusal" 
+                       9 "Not stated" ;
+label define lfw_420a  1 "Very satisfied" 2 "Satisfied" 
+                       3 "Neither satisfied nor dissatisfied" 
+                       4 "Dissatisfied" 5 "Very dissatisfied" 6 "Valid skip" 
+                       7 "Don't know" 8 "Refusal" 9 "Not stated" ;
+label define lfw_420b  1 "Very satisfied" 2 "Satisfied" 
+                       3 "Neither satisfied nor dissatisfied" 
+                       4 "Dissatisfied" 5 "Very dissatisfied" 6 "Valid skip" 
+                       7 "Don't know" 8 "Refusal" 9 "Not stated" ;
+label define lfw_420c  1 "Very satisfied" 2 "Satisfied" 
+                       3 "Neither satisfied nor dissatisfied" 
+                       4 "Dissatisfied" 5 "Very dissatisfied" 6 "Valid skip" 
+                       7 "Don't know" 8 "Refusal" 9 "Not stated" ;
+label define lfw_440   1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define pgm_034   1 "Full-time student" 2 "Part-time student" 
+                       3 "Both full-time and part-time" 6 "Valid skip" 
+                       7 "Don't know" 8 "Refusal" 9 "Not stated" ;
+label define pgm_100   1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define pgm_280a  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define pgm_280b  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define pgm_280c  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define pgm_280d  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define pgm_280e  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define pgm_280f  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define pgm_290   1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define pgm_350   1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define pgm_380   1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define pgm_410   1 "Reputation of institution" 
+                       2 "Availability of program" 3 "Proximity to home" 
+                       4 "Tuition fees" 
+                       5 "Recommendation of family or friends" 6 "Other" 
+                       96 "Valid skip" 97 "Don't know" 98 "Refusal" 
+                       99 "Not stated" ;
+label define pgm_415   1 "Employment opportunities" 
+                       2 "Field of study or specialization" 
+                       3 "Personal or professional interest" 
+                       4 "Reputation of program" 
+                       5 "Recommendation of family or friends" 6 "Other" 
+                       96 "Valid skip" 97 "Don't know" 98 "Refusal" 
+                       99 "Not stated" ;
+label define pgm_430   1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define pgm_440   1 "Not enough jobs available in this field" 
+                       2 "Field of study did not provide job skills needed" 
+                       3 "Not satisfied with current job" 
+                       4 "Change of interest" 
+                       5 "Not satisfied with the quality of the education" 
+                       6 "Other" 96 "Valid skip" 97 "Don't know" 98 "Refusal" 
+                       99 "Not stated" ;
+label define stl_010   1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define stl_020   1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define stl_030   1 "Never needed one" 2 "Thought I would not qualify" 
+                       3 "Did not know how to apply" 
+                       4 "Did not meet residency requirements" 
+                       5 "Not willing to borrow to go to school" 6 "Other" 
+                       96 "Valid skip" 97 "Don't know" 98 "Refusal" 
+                       99 "Not stated" ;
+label define stl_080   1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define stl_100a  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define stl_100b  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define stl_100c  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define stl_100d  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define stl_130   1 "Less than 1 year" 2 "1 to 3 years" 3 "4 to 6 years" 
+                       4 "7 to 10 years" 5 "More than 10 years" 
+                       6 "Valid skip" 7 "Don't know" 8 "Refusal" 
+                       9 "Not stated" ;
+label define stl_150   1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define stl_160b  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define stl_160c  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define stl_160d  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define stl_160e  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define stl_160f  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define stl_160g  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define stl_160h  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define stl_160i  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define stl_160j  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define stl_160l  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define stl_170a  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define stl_170b  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define stl_170c  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define stl_170d  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define stl_170e  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define stl_170f  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define stl_170g  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define stl_170h  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define stl_170i  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define stl_170j  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define stl_170l  1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define stl_190   1 "Yes" 2 "No" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+label define vr2_080   1 "Male" 2 "Female" 6 "Valid skip" 7 "Don't know" 
+                       8 "Refusal" 9 "Not stated" ;
+
+
+#delimit cr
+
+*******************************************************************
+infile using X
+* Replace 'X' with the name of the dictionary file. 
+*
+* The contents of the dictionary are given at the end of this file.
+* Put the dictionary into a separate file (by editing this file).
+* Then specify here the name of the dictionary file.
+*******************************************************************
+* The md, min and max specifications were translated 
+* into the following "REPLACE...IF" statements:
+
+replace aft_020 = . if (aft_020 >= 6 & aft_020 <= 9)
+replace aft_050 = . if (aft_050 >= 6 & aft_050 <= 9)
+replace aft_070 = . if (aft_070 >= 6 & aft_070 <= 9)
+replace aft_080 = . if (aft_080 >= 6 & aft_080 <= 9)
+replace aft_090 = . if (aft_090 >= 6 & aft_090 <= 9)
+replace bef_160 = . if (bef_160 >= 96 & bef_160 <= 99)
+replace aft_p010 = . if (aft_p010 >= 6 & aft_p010 <= 9)
+replace aft_p040 = . if (aft_p040 >= 6 & aft_p040 <= 9)
+replace bef_p140 = . if (bef_p140 >= 6 & bef_p140 <= 9)
+replace bef_p150 = . if (bef_p150 >= 6 & bef_p150 <= 9)
+replace certlevp = . if (certlevp >= 6 & certlevp <= 9)
+replace coop = . if (coop >= 6 & coop <= 9)
+replace ctzshipp = . if (ctzshipp >= 6 & ctzshipp <= 9)
+replace dbtalgrd = . if (dbtalgrd >= 6 & dbtalgrd <= 9)
+replace dbtalint = . if (dbtalint >= 6 & dbtalint <= 9)
+replace dbtotgrd = . if (dbtotgrd >= 6 & dbtotgrd <= 9)
+replace dbtotint = . if (dbtotint >= 6 & dbtotint <= 9)
+replace dclassp = . if (dclassp >= 6 & dclassp <= 9)
+replace ddis_fl = . if (ddis_fl >= 6 & ddis_fl <= 9)
+replace dem_p010 = . if (dem_p010 >= 6 & dem_p010 <= 9)
+replace dem_p030 = . if (dem_p030 >= 6 & dem_p030 <= 9)
+replace dem_p140 = . if (dem_p140 >= 6 & dem_p140 <= 9)
+replace dtyperp = . if (dtyperp >= 6 & dtyperp <= 9)
+replace fatedgrd = . if (fatedgrd >= 6 & fatedgrd <= 9)
+replace fatedint = . if (fatedint >= 6 & fatedint <= 9)
+replace fathedp = . if (fathedp >= 96 & fathedp <= 99)
+replace gradagep = . if (gradagep >= 6 & gradagep <= 9)
+replace hlosgrdp = . if (hlosgrdp >= 6 & hlosgrdp <= 9)
+replace hlosintp = . if (hlosintp >= 6 & hlosintp <= 9)
+replace jobincp = . if (jobincp >= 96 & jobincp <= 99)
+replace jobqlevp = . if (jobqlevp >= 6 & jobqlevp <= 9)
+replace jobqlgrd = . if (jobqlgrd >= 6 & jobqlgrd <= 9)
+replace jobqlint = . if (jobqlint >= 6 & jobqlint <= 9)
+replace lfcindp = . if (lfcindp >= 96 & lfcindp <= 99)
+replace lfcoccp = . if (lfcoccp >= 96 & lfcoccp <= 99)
+replace lfirstp = . if (lfirstp >= 6 & lfirstp <= 9)
+replace lfstat = . if (lfstat >= 6 & lfstat <= 9)
+replace lfwftpt1 = . if (lfwftpt1 >= 6 & lfwftpt1 <= 9)
+replace lfw_p020 = . if (lfw_p020 >= 6 & lfw_p020 <= 9)
+replace lfw_p140 = . if (lfw_p140 >= 6 & lfw_p140 <= 9)
+replace lhomep = . if (lhomep >= 6 & lhomep <= 9)
+replace motedgrd = . if (motedgrd >= 6 & motedgrd <= 9)
+replace motedint = . if (motedint >= 6 & motedint <= 9)
+replace mothedp = . if (mothedp >= 96 & mothedp <= 99)
+replace owegvin = . if (owegvin >= 6 & owegvin <= 9)
+replace oweslgd = . if (oweslgd >= 6 & oweslgd <= 9)
+replace persincp = . if (persincp >= 96 & persincp <= 99)
+replace pgmcipap = . if (pgmcipap >= 96 & pgmcipap <= 99)
+replace pgm_p036 = . if (pgm_p036 >= 6 & pgm_p036 <= 9)
+replace pgm_p400 = . if (pgm_p400 >= 6 & pgm_p400 <= 9)
+replace pgm_p405 = . if (pgm_p405 >= 6 & pgm_p405 <= 9)
+replace prevlevp = . if (prevlevp >= 6 & prevlevp <= 9)
+replace pumfid = . if (pumfid >= 99996 & pumfid <= 99999)
+replace reg_inst = . if (reg_inst >= 6 & reg_inst <= 9)
+replace reg_resp = . if (reg_resp >= 6 & reg_resp <= 9)
+replace resp = . if (resp >= 6 & resp <= 9)
+replace scholar = . if (scholar >= 6 & scholar <= 9)
+replace srcfund = . if (srcfund >= 6 & srcfund <= 9)
+replace stlp160n = . if (stlp160n >= 6 & stlp160n <= 9)
+replace stlp170n = . if (stlp170n >= 6 & stlp170n <= 9)
+replace stuloans = . if (stuloans >= 6 & stuloans <= 9)
+replace visbminp = . if (visbminp >= 6 & visbminp <= 9)
+replace wtpf = . if (wtpf >= 9999999.9996 & wtpf <= 9999999.9999)
+replace edu_010 = . if (edu_010 >= 6 & edu_010 <= 9)
+replace edu_020 = . if (edu_020 >= 6 & edu_020 <= 9)
+replace lfw_010 = . if (lfw_010 >= 6 & lfw_010 <= 9)
+replace lfw_120 = . if (lfw_120 >= 6 & lfw_120 <= 9)
+replace lfw_270 = . if (lfw_270 >= 6 & lfw_270 <= 9)
+replace lfw_280 = . if (lfw_280 >= 6 & lfw_280 <= 9)
+replace lfw_370 = . if (lfw_370 >= 96 & lfw_370 <= 99)
+replace lfw_400 = . if (lfw_400 >= 6 & lfw_400 <= 9)
+replace lfw_410 = . if (lfw_410 >= 6 & lfw_410 <= 9)
+replace lfw_420a = . if (lfw_420a >= 6 & lfw_420a <= 9)
+replace lfw_420b = . if (lfw_420b >= 6 & lfw_420b <= 9)
+replace lfw_420c = . if (lfw_420c >= 6 & lfw_420c <= 9)
+replace lfw_440 = . if (lfw_440 >= 6 & lfw_440 <= 9)
+replace pgm_034 = . if (pgm_034 >= 6 & pgm_034 <= 9)
+replace pgm_100 = . if (pgm_100 >= 6 & pgm_100 <= 9)
+replace pgm_280a = . if (pgm_280a >= 6 & pgm_280a <= 9)
+replace pgm_280b = . if (pgm_280b >= 6 & pgm_280b <= 9)
+replace pgm_280c = . if (pgm_280c >= 6 & pgm_280c <= 9)
+replace pgm_280d = . if (pgm_280d >= 6 & pgm_280d <= 9)
+replace pgm_280e = . if (pgm_280e >= 6 & pgm_280e <= 9)
+replace pgm_280f = . if (pgm_280f >= 6 & pgm_280f <= 9)
+replace pgm_290 = . if (pgm_290 >= 6 & pgm_290 <= 9)
+replace pgm_350 = . if (pgm_350 >= 6 & pgm_350 <= 9)
+replace pgm_380 = . if (pgm_380 >= 6 & pgm_380 <= 9)
+replace pgm_410 = . if (pgm_410 >= 96 & pgm_410 <= 99)
+replace pgm_415 = . if (pgm_415 >= 96 & pgm_415 <= 99)
+replace pgm_430 = . if (pgm_430 >= 6 & pgm_430 <= 9)
+replace pgm_440 = . if (pgm_440 >= 96 & pgm_440 <= 99)
+replace stl_010 = . if (stl_010 >= 6 & stl_010 <= 9)
+replace stl_020 = . if (stl_020 >= 6 & stl_020 <= 9)
+replace stl_030 = . if (stl_030 >= 96 & stl_030 <= 99)
+replace stl_080 = . if (stl_080 >= 6 & stl_080 <= 9)
+replace stl_100a = . if (stl_100a >= 6 & stl_100a <= 9)
+replace stl_100b = . if (stl_100b >= 6 & stl_100b <= 9)
+replace stl_100c = . if (stl_100c >= 6 & stl_100c <= 9)
+replace stl_100d = . if (stl_100d >= 6 & stl_100d <= 9)
+replace stl_130 = . if (stl_130 >= 6 & stl_130 <= 9)
+replace stl_150 = . if (stl_150 >= 6 & stl_150 <= 9)
+replace stl_160b = . if (stl_160b >= 6 & stl_160b <= 9)
+replace stl_160c = . if (stl_160c >= 6 & stl_160c <= 9)
+replace stl_160d = . if (stl_160d >= 6 & stl_160d <= 9)
+replace stl_160e = . if (stl_160e >= 6 & stl_160e <= 9)
+replace stl_160f = . if (stl_160f >= 6 & stl_160f <= 9)
+replace stl_160g = . if (stl_160g >= 6 & stl_160g <= 9)
+replace stl_160h = . if (stl_160h >= 6 & stl_160h <= 9)
+replace stl_160i = . if (stl_160i >= 6 & stl_160i <= 9)
+replace stl_160j = . if (stl_160j >= 6 & stl_160j <= 9)
+replace stl_160l = . if (stl_160l >= 6 & stl_160l <= 9)
+replace stl_170a = . if (stl_170a >= 6 & stl_170a <= 9)
+replace stl_170b = . if (stl_170b >= 6 & stl_170b <= 9)
+replace stl_170c = . if (stl_170c >= 6 & stl_170c <= 9)
+replace stl_170d = . if (stl_170d >= 6 & stl_170d <= 9)
+replace stl_170e = . if (stl_170e >= 6 & stl_170e <= 9)
+replace stl_170f = . if (stl_170f >= 6 & stl_170f <= 9)
+replace stl_170g = . if (stl_170g >= 6 & stl_170g <= 9)
+replace stl_170h = . if (stl_170h >= 6 & stl_170h <= 9)
+replace stl_170i = . if (stl_170i >= 6 & stl_170i <= 9)
+replace stl_170j = . if (stl_170j >= 6 & stl_170j <= 9)
+replace stl_170l = . if (stl_170l >= 6 & stl_170l <= 9)
+replace stl_190 = . if (stl_190 >= 6 & stl_190 <= 9)
+replace vr2_080 = . if (vr2_080 >= 6 & vr2_080 <= 9)
