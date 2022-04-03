@@ -1,5 +1,5 @@
 #### Preamble ####
-# Purpose: Clean and prepare the 2018 National Graduates Survey
+# Purpose: Clean and prepare the 2018 National Graduates Survey data
 # Author: Yunkyung Park
 # Data: 27 April 2022
 # Contact: clara.park@mail.utoronto.ca

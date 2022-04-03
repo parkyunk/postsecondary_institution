@@ -1,5 +1,5 @@
 ---
-title: "What should you expect from the post-secondary institution?"
+title: "What can you expect from the post-secondary institution?"
 author: 
   - Yunkyung Park
 thanks: "Code and data are available at: https://github.com/parkyunk/postsecondary_institution."
