@@ -1,10 +1,11 @@
 ---
 title: "What can you expect from the post-secondary institution?"
+subtitle: "Understanding the transition into the labor market after the post-secondary institution using Logistic Regression"
 author: 
   - Yunkyung Park
 thanks: "Code and data are available at: https://github.com/parkyunk/postsecondary_institution."
 date: "`r format(Sys.time(), '%d %B %Y')`"
-abstract: "Four sentences"
+abstract: "The post-secondary education rate is increasing in Canada. Statistics Canada has been collecting data on the labour market experiences of graduates from universities and community colleges in Canada since 1978. In this paper, we used the 2018 National Graduates Survey and focused on the relation between education experience and labour market outcomes. We observed that 20.93% of the respondents already found a job before completing the degree and 26.41% of the respondents took less than 6 months to find their first job after the graduation. The analysis of the experiences and outcomes of graduates provides insight into a better understanding of the post-secondary education." 
 output:
   bookdown::pdf_document2
 toc: FALSE
@@ -16,9 +17,6 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r library, echo=FALSE, message=FALSE}
-# install.packages('bookdown')
-# install.packages("stringr")
-library(stringr) 
 library(dplyr)
 library(tidyverse) 
 library(janitor)
@@ -26,35 +24,63 @@ library(ggplot2)
 library(knitr)
 library(kableExtra)
 library(bookdown)
+library(broom)
+library(tidymodels)
 ```
 
 ```{r readdata, echo=FALSE}
-ngs<-read_csv('ngs2018.csv', show_col_types = FALSE)
+ngs<-read_csv('data/ngs2018.csv', show_col_types = FALSE)
 ```
+
+**keywords: ** Post-secondary institution, post-secondary education, life after graduation, transition into the labor market, student debt, logistic regression
 
 # Introduction
 
+It was reported that 73% of Canadians aged 25 to 34 had earned a post-secondary qualification in 2019 compared to 59% in 2000 [@educanada]. As generations these days are more likely than previous generations to have completed a post-secondary education, it is important to understand the factors related to entry to college or university. One of the reason is a greater earning potential after completing the degree. Individuals who have completed post-secondary education tend to make more money and their growth in earnings over their lifetime is more likely to be higher than those who does not have the degree [@earnings]. In addition, they are expected to get the greatest social, economic, and personal returns from post-secondary education. To verify whether the post-secondary institution is close to what they expected before entering, this paper analyses the survey conducted on graduates of public post-secondary educational institutions in Canada in the calendar year 2015. The survey was conducted in 2018, which is three years after the graduation of the respondents, and this paper examines their experiences during the program and their life after the graduation.
+
+The paper contains two sub-topics. The first topic is on the experiences during the program. It mainly focuses on the programs taken in the institution such as whether the work placement was included and whether the international opportunity is available. In addition, it focuses on the factors that affected choosing the institution and the program. The second topic is on life after graduation. It puts emphasis on the transition into the labor market after the graduation such as the length of the time it takes to find a job and whether the job is related to their major. 
+
+The rest of the paper is divided into 4 sections. Section \@ref(data) explains how data was collected, the survey methodology, and key features of the survey, and Section \@ref(model) uses logistic regression to see how much the work experience such as co-op and work placement matters in finding their first job after graduation. Section \@ref(results) conveys the findings along with the graphs and tables made. Section \@ref(discussions) explains some interesting points found and discusses in more detail what was found and some limitations of this paper. 
+
 # Data
+
+## Data Collection
+
+The data was obtained from the the 2018 National Graduates Survey (NGS). It is a cross-sectional survey designed to collect data from Canadian graduates of public post-secondary educational institutions. The survey was conducted by interviewing three years after graduation on the class of 2015. It was collected from June 7th to November 9th, 2018 by Statistics Canada. The questionnaire included 234 questions, and respondents could either self-complete the survey online or complete the survey by telephone with a Statistics Canada interviewer through a computer-assisted telephone interview (CATI).
+
+## Survey Frame
+
+The 2018 NGS survey frame was created using administrative data obtained from public colleges and universities through the Post-secondary Student Information System (PSIS). A standard Classification of Instructional Programs (CIP) Canada 2016 code was assigned to all graduates on the frame at the time the record was added to PSIS. The CIP code was used in labeling the field of study variable, and it was further used to eliminate the frame graduates from programs that are not part of the target population.
+
+## Sampling Strategy
+
+The 2018 NGS used a stratified simple random sample design. The sample selection of graduates within strata was done without replacement and using a systematic method. Two variables were used to divide the samples into strata; geographical location of the institution and level of certification. There were 13 geographical locations: the ten provinces and the three northern territories. In addition, there were 4 levels of certification: college, undergraduate, master’s and doctorate. The combination of these three variables made 52 strata in total. However, there were not graduates in every possible strata. Therefore, there were 45 strata created in final.
+
+The target population corresponds to graduates of public post-secondary educational institutions in Canada in the calendar year 2015 who were living in Canada at the time of survey data collection in 2018. It excluded the graduates from private post-secondary institutions, graduates who completed "continuing education" courses, and graduates in apprenticeship programs. 
+
+The sample was designed to yield estimates of a minimal proportion of 5.5% with a maximum coefficient of variation (CV) of 10.47% for any of the 2018 NGS strata. Thus, the target sample size was 59,795. The overall response rate for the 2018 NGS was approximately 63%, with about 2/3 of the response cases self-completed online by respondents. There were 52 questions that were always asked regardless of questionnaire flow, and 11 of the 52 questions are selected to be the minimum response criteria. Only the cases that answered at least 9 of the 11 questions were considered respondents. There were 26 cases that were removed from the NGS submitted data as they did not meet the minimum response criteria and thus were deemed non-respondents. 
 
 ## Key features
 
-The raw data includes 125 variables that were derived from the questionnaire. As mentioned above, some key features include classification variables including age, sex, marital status, income, and core contents such as financial giving, the total amount of donations, etc. The dataset is processed and analyzed using 'R' [@citeR] mainly with the 'tidyverse' [@citetidyverse] and 'dplyr' [@citedplyr] packages. The package 'janitor' [@citejanitor] is used to clean data, and the graphs and the tables are created in 'ggplot2' [@citeggplot2] and 'kableExtra' [@citekableExtra], respectively. The package 'stringr' [@citestringr] is used to manipulate the character string. The packages 'bookdown' [@citebookdown] and 'knitr' [@citeknitr] are used in generating the R Markdown report. Table \@ref(tab:data) created using 'kableExtra' [@citekableExtra] shows a subset of key features that will be discussed in this paper.
+The raw data includes 125 variables that were derived from the questionnaire. The dataset is processed and analyzed using 'R' [@citeR] mainly with the 'tidyverse' [@citetidyverse] and 'dplyr' [@citedplyr] packages. The package 'janitor' [@citejanitor] is used to clean data, and the graphs and the tables are created in 'ggplot2' [@citeggplot2] and 'kableExtra' [@citekableExtra], respectively. The package 'broom' [@citebroom] is used to translate the result of logistic regression model into probabilities. The packages 'bookdown' [@citebookdown] and 'knitr' [@citeknitr] are used in generating the R Markdown report. Table \@ref(tab:data) created using 'kableExtra' [@citekableExtra] shows a subset of key features that will be discussed in this paper.
 
 ```{r data, echo=FALSE}
 ngs %>%
-  select(age_at_grd, gender, lev_of_study, program, time_until_first_job) %>%
+  dplyr::select(age_at_grd, gender, lev_of_study, time_until_first_job) %>%
   slice(1:10) %>%
   kable(caption='A subset of key features',
         col.names = c('Age at graduation', 'Gender', 'Level of study', 
-                      'Program', 'Length of time until first job after graduation'),
+                      'Length of time until first job after graduation'),
         digits = 1,
         booktabs = FALSE,
         linesep = "")
 ```
 
+## Overview
+
 ### Age at graduation
 
-```{r age, echo=FALSE, fig.cap='Distribution of age groups (at the time graduation) and gender in the 2018 NGS survey'}
+```{r age, echo=FALSE, fig.cap='Distribution of age groups (at the time graduation) and gender'}
 age <-
   ngs %>%
   mutate(age_at_grd = 
@@ -76,19 +102,391 @@ age %>%
   ggplot(mapping=aes(x=age_at_grd, fill=gender)) +
   geom_bar(position = "dodge") +
   theme_minimal() +
-  labs(x='Age-group of respondent', y='Number of respondents', 
+  labs(x='Age-group at the time of graduation', y='Number of respondents', 
        fill='Gender')
 ```
 
-Figure \@ref(fig:age) shows the distribution of the age-group at the time of graduation. Note that the survey was conducted in 2018 on the Class of 2015, so by the time the survey was completed, we can expect that the age distribution of the survey would be slightly different. Also, we can see that more female graduated from post-secondary institution. Since it is only conducted to the ones who graduated, it does not tell that female tends to go to post-secondary institution more than male. The drop-out rate 
+Figure \@ref(fig:age) shows the distribution of the age-group at the time of graduation. Note that the survey was conducted in 2018 on the Class of 2015, so by the time the survey was completed, we can expect that the age distribution of the survey would be slightly different. We see that more female graduated from post-secondary institution. It should be mentioned that since it is conducted to the ones who graduated, it does not tell that female tends to go to post-secondary institution more than male. In addition, we can tell that more than a half of the students graduate their post-secondary institution at the age of less than 25. 
+
+### Level of study
+
+```{r edulevel, echo=FALSE, fig.cap='Distribution of level of study'}
+edulevel <-
+  ngs %>%
+  mutate(lev_of_study = factor(lev_of_study,
+                               levels = c("Bachelor's",
+                                          "College",
+                                          "Master's / Doctorate")
+  )
+  )
+
+edulevel %>%
+  ggplot(mapping=aes(x=lev_of_study, fill=lev_of_study)) +
+  geom_bar() +
+  theme_minimal() +
+  labs(x='Level of study', y='Number of respondents', fill='') +
+  theme(legend.position='none')
+```
+
+Figure \@ref(fig:edulevel) shows that over 8,000 of the respondents have obtained the Bachelor's degree. Bachelor's, Master's, and Doctorate degree are obtained from the university, so it indicates that there are more graduates from the university than from the college. Master's and Doctorate degree can be obtained after they earn the Bachelor's degree, so the age distribution of the individuals who obtained Master's and Doctorate degree tend to be higher than that of the ones who obtained Bachelor's degree. Thus, the distribution of the level of study of the respondents shown in Figure \@ref(fig:edulevel) corresponds to the distribution of the age groups at the time of graduation shown in Figure \@ref(fig:age).
+
+### Program
+
+```{r program, echo=FALSE, fig.cap='Distribution of field of study'}
+program <-
+  ngs %>%
+  dplyr::select(program) %>%
+  group_by(program) %>%
+  summarise(count = n()) %>%
+  mutate(program = 
+           recode(program,
+                  'Agriculture, natural resources and conservation' = 'Agriculture',
+                  'Architecture, engineering, and related technologies' = 'Architecture, engineering',
+                  'Business, management and public administration' = 'Business',
+                  'Mathematics, computer and information sciences' = 'Mathematics, computer science',
+                  'Physical and life sciences and technologies' = 'Physical and life science',
+                  'Social and behavioural sciences and law' = 'Social science',
+                  'Visual and performing arts, and communications technologies' = 'Visual and performing arts')
+  ) %>%
+  mutate(program =
+           factor(program,
+                  levels = c('Agriculture',
+                             'Architecture, engineering',
+                             'Business',
+                             'Education',
+                             'Humanities',
+                             'Mathematics, computer science',
+                             'Physical and life science',
+                             'Social science',
+                             'Visual and performing arts',
+                             'Other')
+           )
+  )
+
+program %>%
+  ggplot(aes(x=program, y=count, fill=program)) +
+  geom_bar(stat = 'identity') +
+  geom_text(aes(label=paste(round(count/sum(count),4)*100, '%')), size=4, position=position_stack(vjust = 1.03)) +
+  theme_minimal() +
+  labs(x='Field of study', y='Number of respondents', fill='') +
+  coord_flip() +
+  theme(legend.position = 'none')
+```
+
+Figure \@ref(fig:program) demonstrates that 22.07% of the respondents studied business in their institution, and 15.51% specialized in social science. However, less than 1,000 respondents studied mathematics or computer science. It is worth mentioning that computer science jobs are high in demand, but the number of individuals who majored computer science is low. Major field of study is classified according to the Classification of Instructional Programs (CIP) Canada 2016.
+
+## Length of time until first job
+
+```{r transition, echo=FALSE, fig.cap='Distribution of the length of time it took until finding the first job'}
+transition <-
+  ngs %>%
+  mutate(time_until_first_job = 
+           case_when(time_until_first_job == "Less than 6 months" ~ "<6 months",
+                     time_until_first_job == "6 months to less than 12 months" ~ "6 months - 12 months",
+                     time_until_first_job == "Already working at a job or business" ~ "Already working",
+                     time_until_first_job == "1 year to less than 2 years" ~ "1 year - 2 years",
+                     time_until_first_job == "2 years or more" ~ ">2 years"
+                     ),
+         time_until_first_job = 
+           factor(time_until_first_job,
+                  levels = c("Already working",
+                             "<6 months",
+                             "6 months - 12 months",
+                             "1 year - 2 years",
+                             ">2 years")
+                  )
+  ) %>%
+  count(time_until_first_job)
+
+transition %>%
+  ggplot(mapping=aes(x=time_until_first_job, y=n, fill=time_until_first_job)) +
+  geom_bar(stat="identity") +
+  geom_text(aes(label=paste(round(n/sum(n),4)*100, '%')), size=4,  position=position_stack(vjust = 1.03)) +
+  theme_minimal() +
+  coord_flip() +
+  labs(x='Length of time until the first job', y='Number of respondents', fill='') +
+  theme(legend.position='none')
+```
+
+Figure \@ref(fig:transition) shows that approximately half of the respondents did not take long time to find their first job. 20.93% found their job before graduating, and 26.41% took less than 6 months to get their first job. However, it should be noted that 8,849 of the respondents did not answer this question. Even though it is not specified what those people mean, it includes the ones who could not find a job as well as the ones who chose not to work after graduating the institution. 
 
 # Model
-y = time_until_first_job
 
-x_1 = lev_of_study (Bacher's / Master's / ...)
-x_2 = program (math / design / ...)
-x_3 = participated_co_op
-x_4 = grade (A+, ...)
+According to NACE's Job Outlook 2017 survey, it was reported that nearly 91 percent of employers prefer that their candidates have relevant work experience [@workexperience]. Most university students think that one of the first things an employer looks for is a high GPA. Although a high GPA may be very important for some jobs such as those in the fields of financial services or science, many surveys of employers show that relevant work experience is what they seek most in their job candidates [@workexperience]. However, this is on employer's perspective. I will try to view it from the point of view of the ones who are seeking for jobs. 
+
+Logistic model requires the dependent variable to have a binary outcome. So, I adjusted a variable named 'time until first job' to make it into binary outcome. If an individual was already working at the time of graduation or took less than 6 months to find their first job, I marked them short to indicate that it took them a short amount of time to find the first job. On the other hand, if they took more than 6 months, I marked them long to indicate that they took relatively a long time to find the first job.
+
+On top of that, I would like to see the importance of the work experience in getting a first job. Since Co-op and work placement are the only variables available in this dataset which can be considered relevant work experiences, I created a new variable named 'work experience' which indicates whether they have a work experience or not. If a respondent reported that they have either participated co-op or had a work placement in the program, then I claimed that they have relevant work experience; if the respondent answered no in both co-op and work placement, then I marked no in work experience. 
+
+Let $y$ denote transition into labor market and $\beta_1$ indicates whether they have a relevant work experience or not. If they do, then $\beta_1=1$. Otherwise, $\beta_1=0$.  
+$$\text{Pr}(y = 1) = \text{logit}^{-1}(\beta_0+\beta_1 x)$$
+
+```{r logistic, echo=FALSE}
+ngs0 <-
+  ngs %>%
+  mutate(transition_into_labor_market = 
+           case_when(time_until_first_job == "Less than 6 months" ~ "short",
+                     time_until_first_job == "6 months to less than 12 months" ~ "long",
+                     time_until_first_job == "Already working at a job or business" ~ "short",
+                     time_until_first_job == "1 year to less than 2 years" ~ "long",
+                     time_until_first_job == "2 years or more" ~ "long"
+           ),
+         transition_into_labor_market = 
+           factor(transition_into_labor_market,
+                  levels = c("short",
+                             "long")
+           ),
+         work_experience = 
+           case_when(participate_co_op == "Yes" | work_placement_during_program == "Yes" ~ "Yes",
+                     participate_co_op == "No" & work_placement_during_program == "No" ~ "No")
+  ) %>%
+  dplyr::select(transition_into_labor_market, work_experience) %>%
+  drop_na()
+
+model <- 
+  glm(transition_into_labor_market ~ work_experience,
+      data = ngs0,
+      family = 'binomial')
+
+summary(model)
+```
+
+```{r predict, echo=FALSE}
+transition_into <-
+  augment(model,
+          data = ngs0,
+          type.predict = "response")
+```
+
+
+```{r plt, echo=FALSE, fig.cap=""}
+transition_into %>%
+  ggplot(aes(x=work_experience,
+             y=.fitted,
+             color = transition_into_labor_market)) + 
+  geom_jitter(width = 0.01, height = 0.01) +
+  labs(x = "Whether they have a work experience",
+       y = "Estimated probability how long it took them to find the first job",
+       color = "Actually took them short") +
+  theme_classic()
+```
+
+```{r prediction, echo=FALSE}
+transition_into_split <- initial_split(transition_into, prop = 0.80)
+transition_into_train <- training(transition_into_split)
+transition_into_test <- testing(transition_into_split)
+
+transition_into_tidymodels <-
+  logistic_reg(mode = "classification") %>%
+  set_engine("glm") %>%
+  fit(transition_into_labor_market ~ work_experience,
+      data = transition_into_train)
+
+transition_into_tidymodels %>%
+  predict(new_data = transition_into_test) %>%
+  cbind(transition_into_test) %>%
+  conf_mat(truth = transition_into_labor_market, estimate = .pred_class)
+```
+
 
 # Results
 
+## Experiences during the program
+
+```{r experience, echo=FALSE}
+experience <-
+  ngs %>%
+  dplyr::select(c(participate_co_op,
+           work_placement_during_program,
+           entrepreneurial_completed_courses,
+           worked_during_program,
+           volunteered_during_program,
+           outside_canada_included_program)
+  )
+
+experience_df<-data.frame('Experience'=c(''),
+                       'No'=c(''),
+                       'Yes'=c(''),
+                       'NA'=c(''))
+
+experience_lst<-c('Participated Co-op',
+                  'Work placement',
+                  'Entrepreneurial course',
+                  'Work',
+                  'Volunteer',
+                  'International')
+
+i <- 1
+for (r in colnames(experience)){
+  counted<-
+    experience %>%
+    count(.data[[r]]) %>%
+    mutate(proportion = round(n/sum(n),4)*100)
+  
+  experience_df<-rbind(experience_df, c(experience_lst[i], counted$proportion))
+  i<-i+1
+}
+rm(i, counted, r, experience_lst)
+
+experience_df<-experience_df[-c(1),]
+
+experience_df %>% 
+  as_tibble() %>%
+  mutate(Yes = as.numeric(Yes),
+         No = as.numeric(No),
+         NA. = as.numeric(NA.)) %>%
+  arrange(desc(Yes)) %>%
+  relocate(Yes, .after=Experience) %>%
+  kable(caption = "Sources of experience (in \\%)") %>%
+  row_spec(0, bold=TRUE) %>%
+  kable_styling()
+```
+
+Table \@ref(tab:experience) illustrates that 73.63% of the respondents worked during the program. Their work may be related to their career but it may not be. While 46.67% had work placement in their program, 10.56% participated co-op. Both work placement and co-op provide an opportunity for students to bridge academic skills and theory to continuous learning in the workplace, but co-op programs are usually 4 months long and occur May to August whereas work placements are integrated learning experiences and are usually scheduled during the final semester of a post-secondary program [@coop]. On the other hand, only 5.92% have experienced international experience during the program. However, it is worth mentioning that international students comprised 11% of Canada's post-secondary enrollment in the 2015-2016 academic year [@international]. An international opportunity might not look as attractive to international students. 
+
+## Job related to the program
+
+```{r related, echo=FALSE, fig.cap="Distribution of the respondents whether their job is related to the program"}
+related <-
+  ngs %>%
+  mutate(job_related_to_program = 
+           case_when(job_related_to_program == "Closely related" ~ "Closely related", 
+                     job_related_to_program == "Somewhat related" ~ "Somewhat related",
+                     job_related_to_program == "Not at all related" ~ "Not at all"
+                     ),
+         job_related_to_program = 
+           factor(job_related_to_program,
+                  levels = c("Closely related",
+                             "Somewhat related",
+                             "Not at all")
+                  )
+  ) %>% 
+  count(job_related_to_program) %>%
+  drop_na()
+
+related %>%
+  ggplot(mapping=aes(x=job_related_to_program, y=n, fill=job_related_to_program)) +
+  geom_bar(stat="identity") +
+  geom_text(aes(label=paste(round(n/sum(n),4)*100, '%')), size=4, position=position_stack(vjust = 1.03)) +
+  theme_minimal() +
+  labs(x='Job related to the program', y='Number of respondents', fill='') +
+  theme(legend.position='none')
+```
+
+Figure \@ref(fig:related) demonstrates that more than two-thirds of the respondents said that their job is related to the program that they studied in the post-secondary institution. In detailed, 49.77% responded that their job is closely related to their post-secondary program, and 20.16% responded that their job is somewhat related. However, approximately one-third found a job that is not related to what they studied in the post-secondary institution at all. Note that I purposely excluded 8,849 respondents, who did not answer the question related to the length of time until the first job as shown in Figure \@ref(fig:transition). They already told us that the institution does not help to get a job and does not tell anything more about the relation between the job and the program. 
+
+## Sources of funding
+
+```{r funding, echo=FALSE}
+funding <-
+  ngs %>%
+  dplyr::select(starts_with('sources_of_funding_'), received_gov_sponsored_student_loan)
+
+funding_df<-data.frame('Source'=c(''),
+                       'No'=c(''),
+                       'Yes'=c(''),
+                       'NA'=c(''))
+
+funding_lst<-c('RESP',
+               'Government grants',
+               'Non-government grants',
+               'Scholarships',
+               'Earnings',
+               'RA/TA',
+               'Parents',
+               'Bank loans',
+               'Credit cards',
+               'Employer',
+               'Government student loans'
+)
+
+i <- 1
+for (r in colnames(funding)){
+  counted<-
+    funding %>%
+    count(.data[[r]]) %>%
+    mutate(proportion = round(n/sum(n),4)*100)
+  
+  funding_df<-rbind(funding_df, c(funding_lst[i], counted$proportion))
+  i<-i+1
+}
+rm(i, counted, r, funding_lst)
+
+funding_df<-funding_df[-c(1),]
+
+funding_df %>% 
+  as_tibble() %>%
+  mutate(Yes = as.numeric(Yes),
+         No = as.numeric(No),
+         NA. = as.numeric(NA.)) %>%
+  arrange(desc(Yes)) %>%
+  relocate(Yes, .after=Source) %>%
+  kable(caption = "Sources of funding") %>%
+  row_spec(0, bold=TRUE) %>%
+  kable_styling()
+```
+
+Table \@ref(tab:funding) illustrates that it is most likely for the post-secondary students to pay their tuition by earning. In other words, they tend to afford their tuition by their own. Next, they are likely to receive a support from their parents. On the other hand, only 8.13% of the respondents have received a financial support from their employer. 
+
+## Debt Loan at the time of graduation
+
+```{r debt, echo=FALSE, fig.cap="Distribution of amount of debt loan at the time of graduation"}
+debt <-
+  ngs %>%
+  mutate(debt_loan_at_grd = 
+           case_when(debt_loan_at_grd == "$0" ~ "None",
+                     debt_loan_at_grd == "Less than $5,000" ~ "<$5,000",
+                     debt_loan_at_grd == "$5,000 to less than $10,000" ~ "$5,000-$10,000",
+                     debt_loan_at_grd == "$10,000 to less than $25,000" ~ "$10,000-$25,000",
+                     debt_loan_at_grd == "$25,000 or more" ~ ">$25,000"
+           ),
+         debt_loan_at_grd = 
+           factor(debt_loan_at_grd,
+                  levels = c("None",
+                             "<$5,000",
+                             "$5,000-$10,000",
+                             "$10,000-$25,000",
+                             ">$25,000")
+           ),
+         debt_loan_at_grd = 
+           factor(debt_loan_at_grd,
+                  levels = rev(levels(debt_loan_at_grd)
+                  )
+           )
+  ) %>% 
+  count(debt_loan_at_grd) %>%
+  drop_na()
+
+debt %>%
+  ggplot(mapping=aes(x=debt_loan_at_grd, y=n, fill=debt_loan_at_grd)) +
+  geom_bar(stat="identity", na.rm=TRUE) +
+  geom_text(aes(label=paste(round(n/sum(n),4)*100, '%')), size=4, position=position_stack(vjust = 1)) +
+  coord_flip() +
+  theme_minimal() +
+  labs(x='the amount of debt loan', y='Number of respondents', fill='') +
+  theme(legend.position='none')
+```
+
+It can be observed from Figure \@ref(fig:debt) that 31.19% of the respondents graduated with a debt loan greater than \$25,000, and 29.75% graduated with a debt greater than \$10,000. It is reported that 16.65% did not have any debt loan at the time of graduation. The dataset included 8,508 respondents who did not answer this questionnaire, and we purposely excluded them in plotting the graphs as they do not tell anything about the data itself and it is unclear what they mean. 
+
+# Discussions
+
+## During the program
+
+
+
+## Debt loan
+
+Table \@ref(tab:funding) shows that 47.75% received government student loans, and 23.20% received government grants. Note that every loan needs to be pay back whereas grants need not to be repaid [@grant]. Loan can be thought as borrowing money, so you need to pay back the amount that you borrowed as well as pay the interest rate [@grant]. On the other hand, grants is the financial award, so it does not have to be repaid [@grant]. We can observe from Table \@ref(tab:funding) that it is more likely to receive loans than grants. Besides government student loans, 20.20% got a loan from the bank. 
+
+Figure \@ref(fig:debt) demonstrates that more than a half of the respondents graduated with a debt loan greater than \$10,000. In particular, approximately one-third of the respondents said that they had more than \$25,000 of debt at the time of graduation. It was reported that it takes ~10 years on average to pay off a debt of \$10,000 with a 10% interest rate [@payoff]. The average salary of the graduates was reported to be \$38,000 in the survey of 2018 [@salary]. Therefore, if we consider that they pay off \$100 every month, then it will take 15 years to pay off. 
+
+## Limitations
+
+Although this paper only focused on the program itself, throughout their education, there are lots of opportunities. There are many extra-curricular activities that are available such as club, workshops, conference, job fairs, etc. In addition, students get to meet many people with all different backgrounds. Since this paper did not take those into consideration, the post-secondary institutions offer a lot more opportunities than that are being discussed in this paper. Therefore, there are some limitations in this paper in that aspect. 
+
+They grouped Master's and Doctorate degree in one. However, they are quite different. Master's degree takes at most two years whereas doctorate degree takes five years on average. In addition, there are some professional Master's program. 
+
+\newpage
+
+# References
