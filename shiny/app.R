@@ -1,7 +1,7 @@
 #### Preamble ####
 # Purpose: Make interactive web applications using the 2018 National Graduates Survey data
 # Author: Yunkyung Park
-# Data: 27 April 2022
+# Data: 24 April 2022
 # Contact: clara.park@mail.utoronto.ca
 # License: MIT
 # Pre-requisites: 
@@ -72,13 +72,9 @@ ui <- fluidPage(
 # Define server logic required to draw a bar plot
 server <- function(input, output) {
     output$about <- renderText({
-        paste("This website is created with data from the National Graduates Survey 2018 conducted on Class of 2015. The dataset is processed using ‘R’ (R Core Team 2021), and it used the packages 'shiny' (Chang et al. 2021), 'ggplot2' (Wickham 2016), and 'tidyverse' (Wickham et al. 2019) to make this web applications.",
-              "",
-              "References",
-              "Chang, Winston, Joe Cheng, JJ Allaire, Carson Sievert, Barret Schloerke, Yihui Xie, Jeff Allen, Jonathan McPherson, Alan Dipert, and Barbara Borges. 2021. Shiny: Web Application Framework for R. https://shiny.rstudio.com/.",
-              "R Core Team. 2021. R: A Language and Environment for Statistical Computing. Vienna, Austria: R Foundation for Statistical Computing. https://www.R-project.org/",
-              "Wickham, Hadley. 2016. Ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York. https://ggplot2.tidyverse.org.",
-              "Wickham, Hadley, Mara Averick, Jennifer Bryan, Winston Chang, Lucy D’Agostino McGowan, Romain François, Garrett Grolemund, et al. 2019. “Welcome to the tidyverse.” Journal of Open Source Software 4 (43): 1686. https://doi.org/10.21105/joss.01686.",
+        paste("This website is created with data from the National Graduates Survey 2018 conducted on Class of 2015.",
+              "It provides a more thorough understanding of the dataset with taking relevant work experience into account.",
+              "However, note that only co-op and work placement are included, and the internship experience is excluded in plotting the figures.",
               sep = '\n')
               
     })
@@ -122,8 +118,9 @@ server <- function(input, output) {
         
         ggplot(mapping=aes(x=choice, fill=choice)) +
             geom_bar() +
+            scale_x_discrete(limits = c("Yes", "No")) + 
             theme_minimal() +
-            labs(x='Gender', 
+            labs(x='Work experience', 
                  y='Number of respondents', 
                  fill='') +
             theme(legend.position='none')
