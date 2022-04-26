@@ -7,9 +7,9 @@ This repository contains the full source code for the paper "What can you expect
 ## Repo Structure
 
 - 'inputs' folder contains an empty folder 'data' since the NGS data is not permitted to be shared to public. Instead, the steps to obtain the data are indicated below.
-- 'scripts' folder contains a single script, ngs_cleaning.R, which takes raw data from 'inputs/data' as an input and outputs cleaned data into 'inputs/data'.
+- 'scripts' folder contains two scripts; 00-simulation.R which simulates the 2018 NGS dataset and 01-clean_and_prepare_data.R which takes raw data from 'inputs/data' as an input and outputs cleaned data into 'outputs/data'.
 - 'outputs' folder contains the files necessary to reproduce this paper as well as the pdf copy of the paper. It includes the rmd file which is needed to reproduce it and a reference bib file containing the references used for the paper.
-- 'shiny' folder contains two scripts; process_data_for_shiny.R which takes cleaned data from 'outputs/data' as an input and processes data to create a shiny app and app.R which makes interactive web applications using the R package 'shiny'.
+- 'shiny' folder contains two scripts; 01-clean_and_prepare_data_for_shiny.R which takes cleaned data from 'outputs/data' as an input and processes data to create a shiny app and app.R which makes interactive web applications using the R package 'shiny'.
 
 ## Steps to access 2018 National Grauates Survey
 
