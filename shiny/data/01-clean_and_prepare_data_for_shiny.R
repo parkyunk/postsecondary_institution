@@ -1,12 +1,12 @@
 #### Preamble ####
 # Purpose: Clean and prepare the 2018 National Graduates Survey data for Shiny App
 # Author: Yunkyung Park
-# Data: 24 April 2022
+# Date: 26 April 2022
 # Contact: clara.park@mail.utoronto.ca
 # License: MIT
 # Pre-requisites: 
 # - Need to have downloaded the 2018 National Graduates Survey and 
-# run scripts/ngs_cleaning.R
+# run scripts/01-clean_and_prepare_data.R
 # - Don't forget to gitignore it!
 
 
@@ -38,6 +38,8 @@ ngs_shiny <-
 
 ngs_shiny <-
   ngs_shiny %>%
+  # create a columns that correspond to each choice that is possible in shiny app
+  # expand each variable
   mutate(age_at_grd0 = 
            case_when(age_at_grd == "Less than 25" & work_experience == "Yes" ~ "Yes",
                      age_at_grd == "Less than 25" & work_experience == "No" ~ "No"),

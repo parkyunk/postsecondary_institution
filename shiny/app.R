@@ -1,12 +1,12 @@
 #### Preamble ####
 # Purpose: Make interactive web applications using the 2018 National Graduates Survey data
 # Author: Yunkyung Park
-# Data: 24 April 2022
+# Data: 26 April 2022
 # Contact: clara.park@mail.utoronto.ca
 # License: MIT
 # Pre-requisites: 
 # - Need to have downloaded the 2018 National Graduates Survey and 
-# run shiny/data/process_data_for_shiny.R to prepare the data
+# run shiny/data/01-clean_and_prepare_data_for_shiny.R to prepare the data
 # - Don't forget to gitignore it!
 
 #

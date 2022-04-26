@@ -1,7 +1,7 @@
 #### Preamble ####
 # Purpose: Simulate some data that could resemble the 2018 National Graduates Survey dataset.
 # Author: Yunkyung Park
-# Data: 26 April 2022
+# Date: 26 April 2022
 # Contact: clara.park@mail.utoronto.ca
 # License: MIT
 # Pre-requisites: 
