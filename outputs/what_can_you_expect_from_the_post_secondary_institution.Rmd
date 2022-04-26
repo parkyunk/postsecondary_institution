@@ -17,6 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r library, echo=FALSE, message=FALSE}
+# load the library
 library(dplyr)
 library(tidyverse) 
 library(janitor)
@@ -30,6 +31,7 @@ library(huxtable)
 ```
 
 ```{r readdata, echo=FALSE}
+# read the data
 ngs<-read_csv('data/ngs2018.csv', show_col_types = FALSE)
 ```
 
@@ -82,6 +84,7 @@ ngs %>%
 ### Age at graduation
 
 ```{r age, echo=FALSE, fig.cap='Distribution of age groups (at the time of graduation) and gender', fig.width=6, fig.height=4}
+# focus on age 
 age <-
   ngs %>%
   mutate(age_at_grd = 
@@ -99,6 +102,7 @@ age <-
                             )
          )
 
+# create a bar chart of age distribution
 age %>%
   ggplot(mapping=aes(x=age_at_grd, fill=gender)) +
   geom_bar(position = "dodge") +
@@ -111,7 +115,8 @@ Figure \@ref(fig:age) shows the distribution of the age-group at the time of gra
 
 ### Level of study
 
-```{r edulevel, echo=FALSE, fig.cap="Distribution of level of study of education programs that the graduates pursued", fig.width=6, fig.height=4}
+```{r edulevel, echo=FALSE, fig.cap="Distribution of the educational level that the graduates pursued and whether they have relevant work experience", fig.width=6, fig.height=4}
+# focus on the level of education and work experience
 institution <-
   ngs %>%
   mutate(work_experience = 
@@ -126,18 +131,20 @@ institution <-
   select(lev_of_study, work_experience) %>%
   drop_na()
 
+# create a bar chart of educational level distribution with work experience specified
 institution %>%
   ggplot(mapping=aes(x=lev_of_study, fill=work_experience)) +
   geom_bar() +
   theme_minimal() +
-  labs(x='Level of study', y='Number of respondents', fill='Work experience')
+  labs(x='Level of study', y='Number of respondents', fill='Relevant work experience')
 ```
 
-Figure \@ref(fig:edulevel) shows that over 8,000 of the respondents have obtained a Bachelor's degree. Bachelor's, Master's, and Doctorate degrees are obtained from the university, so it indicates that there are more graduates from the university than from the college. A Master's and a Doctorate degree can be obtained after they earn a Bachelor's degree, so the age distribution of the individuals who obtained a Master's and a Doctorate degree tend to be higher than that of the ones who obtained Bachelor's degrees. Thus, the distribution of the level of study of the respondents shown in Figure \@ref(fig:edulevel) corresponds to the distribution of the age-group at the time of graduation shown in Figure \@ref(fig:age). In addition, we can observe that even though there are more respondents who completed their undergraduate degree than the ones who went to college, the number of students who have relevant work experience is similar. 
+Figure \@ref(fig:edulevel) shows that over 8,000 of the respondents have obtained a Bachelor's degree. Bachelor's, Master's, and Doctorate degrees are obtained from the university, so it indicates that there are more graduates from the university than from the college. A Master's and a Doctorate degree can be obtained after they earn a Bachelor's degree, so the age distribution of the individuals who obtained a Master's and a Doctorate degree tend to be higher than that of the ones who obtained Bachelor's degrees. Thus, the distribution of the level of study of the respondents shown in Figure \@ref(fig:edulevel) corresponds to the distribution of the age-group at the time of graduation shown in Figure \@ref(fig:age). In addition, we can observe that even though there are more respondents who completed their undergraduate degree than the ones who went to college, the number of students who have relevant work experience is similar. Participating Co-op and work placement are considered to have relevant work experience, so the variable for work experience is creating by combining two variables co-op and work placement. 
 
 ### Length of time until first job
 
 ```{r transition, echo=FALSE, fig.cap='Distribution of the time it took until finding the first job', fig.width=6, fig.height=4}
+# focus on the transition into the labor market after the graduation
 transition <-
   ngs %>%
   mutate(time_until_first_job = 
@@ -158,6 +165,7 @@ transition <-
   ) %>%
   count(time_until_first_job)
 
+# create a bar chart that shows the distribution of the time until first job
 transition %>%
   ggplot(mapping=aes(x=time_until_first_job, y=n, fill=time_until_first_job)) +
   geom_bar(stat="identity") +
@@ -188,21 +196,24 @@ On top of that, I would like to see the importance of work experience in getting
 ```{r logistic, echo=FALSE}
 ngs0 <-
   ngs %>%
-  mutate(transition_into_labor_market = 
-           case_when(time_until_first_job == "Less than 6 months" ~ "short",
-                     time_until_first_job == "6 months to less than 12 months" ~ "long",
-                     time_until_first_job == "Already working at a job or business" ~ "short",
-                     time_until_first_job == "1 year to less than 2 years" ~ "long",
-                     time_until_first_job == "2 years or more" ~ "long"
-           ),
-         transition_into_labor_market = 
-           factor(transition_into_labor_market,
-                  levels = c("long",
-                             "short")
-           ),
-         work_experience = 
-           case_when(participate_co_op == "Yes" | work_placement_during_program == "Yes" ~ "1",
-                     participate_co_op == "No" & work_placement_during_program == "No" ~ "0")
+  mutate(
+    # adjust the dependent variable and make it into a binary outcome
+    transition_into_labor_market = 
+      case_when(time_until_first_job == "Less than 6 months" ~ "short",
+                time_until_first_job == "6 months to less than 12 months" ~ "long",
+                time_until_first_job == "Already working at a job or business" ~ "short",
+                time_until_first_job == "1 year to less than 2 years" ~ "long",
+                time_until_first_job == "2 years or more" ~ "long"
+      ),
+    transition_into_labor_market = 
+      factor(transition_into_labor_market,
+             levels = c("long",
+                        "short")
+      ),
+    # adjust the independent variable (combine relevant work experience)
+    work_experience = 
+      case_when(participate_co_op == "Yes" | work_placement_during_program == "Yes" ~ "1",
+                participate_co_op == "No" & work_placement_during_program == "No" ~ "0")
   ) %>%
   dplyr::select(transition_into_labor_market, work_experience) %>%
   drop_na()
@@ -223,22 +234,26 @@ transition_into <-
 ## Validation
 
 ```{r prediction, echo=FALSE, fig.cap='Confusion matrix for validating the fitted model', fig.width=6, fig.height=4}
+# split the data into training set (80% of the dataset) and test set (the remaining 20%) for the purpose of validation
 transition_into_split <- initial_split(transition_into, prop = 0.80)
 transition_into_train <- training(transition_into_split)
 transition_into_test <- testing(transition_into_split)
 
+# train the model using the training set
 transition_into_tidymodels <-
   logistic_reg(mode = "classification") %>%
   set_engine("glm") %>%
   fit(transition_into_labor_market ~ work_experience,
       data = transition_into_train)
 
+# test the model using the testing set
 tab <-
-transition_into_tidymodels %>%
+  transition_into_tidymodels %>%
   predict(new_data = transition_into_test) %>%
   cbind(transition_into_test) %>%
   conf_mat(truth = transition_into_labor_market, estimate = .pred_class)
 
+# create a heatmap to see the quality of the model
 autoplot(tab, type = "heatmap")
 ```
 
@@ -254,6 +269,7 @@ $$\text{log} \left(\frac{\text{Pr}[Y = short]}{\text{Pr}[Y = long]} \right) = \b
 The ratio of success to failure probabilities is called the odds. In this model, if the respondent took a short amount of time to find a job, then it is considered a success; long indicates failure. Therefore, our means model for logistic regression is that the log of the odds of success is equal to the linear combination of explanatory variable $\beta_1$. In other words, if $\beta_1>0$ then an increase in the variable is associated with an increase in the chance of success and vice versa.
 
 ```{r ttable, echo=FALSE, message=FALSE, warning=FALSE}
+# t-table of the model
 set_caption(huxreg(model), "Model results")
 ```
 
@@ -261,6 +277,7 @@ $$\text{logit}(p)=1.754+0.218x \iff p = \frac{1}{1+e^{-(1.754+0.218x)}}$$
 Table \@ref(tab:ttable) shows that both the intercept ($\beta_0$) and the parameter estimates ($\beta_1$) are significant. It means that we fail to reject the null hypothesis that there is no relationship between the dependent variable and the explanatory variable. If an individual has relevant work experience, then the odds of taking less time to find a job increase by 0.22.
 
 ```{r predict, echo=FALSE, fig.cap='Logistic regression probability results with data of whether it took the respondents short to find their first job based on whether they have relevant work experience', fig.width=6, fig.height=5}
+# plot the model
 transition_into %>%
   ggplot(aes(x=work_experience,
              y=.fitted,
@@ -277,6 +294,7 @@ Since there are so few cases which took a long time to find a job, the model is 
 ## During the program
 
 ```{r program, echo=FALSE, fig.cap='Distribution of major field of study that the graduates pursued', fig.width=6, fig.height=4}
+# focus on the program
 program <-
   ngs %>%
   dplyr::select(program) %>%
@@ -308,6 +326,7 @@ program <-
   ) %>%
   drop_na()
 
+# create a bar plot that shows the distribution of the major field that the respondents studied
 program %>%
   ggplot(aes(x=program, y=count, fill=program)) +
   geom_bar(stat = 'identity') +
@@ -323,6 +342,7 @@ Figure \@ref(fig:program) demonstrates that 22.07% of the respondents studied bu
 ```{r experience, echo=FALSE}
 experience <-
   ngs %>%
+  # select the variables that correspond to the experiences during the program
   dplyr::select(c(participate_co_op,
            work_placement_during_program,
            entrepreneurial_completed_courses,
@@ -357,6 +377,7 @@ rm(i, counted, r, experience_lst)
 
 experience_df<-experience_df[-c(1),]
 
+# make it into table 
 experience_df %>% 
   as_tibble() %>%
   mutate(Yes = as.numeric(Yes),
@@ -376,6 +397,7 @@ Table \@ref(tab:experience) illustrates that 73.63% of the respondents worked du
 ```{r funding, echo=FALSE}
 funding <-
   ngs %>%
+  # select every variable related to the sources of funding 
   dplyr::select(starts_with('sources_of_funding_'), received_gov_sponsored_student_loan)
 
 funding_df<-data.frame('Source'=c(''),
@@ -410,6 +432,7 @@ rm(i, counted, r, funding_lst)
 
 funding_df<-funding_df[-c(1),]
 
+# make it into table
 funding_df %>% 
   as_tibble() %>%
   mutate(Yes = as.numeric(Yes),
@@ -425,6 +448,7 @@ funding_df %>%
 Table \@ref(tab:funding) illustrates that it is most likely for post-secondary students to pay their tuition by earning. In other words, they tend to afford their tuition on their own. Next, they are likely to receive support from their parents. On the other hand, only 8.13% of the respondents have received financial support from their employer. However, it does not mean that they could afford the entire tuition fee. 47.75% received government student loans, and 20.20% received bank loans. 
 
 ```{r debt, echo=FALSE, fig.cap="Amount of debt loan at the time of graduation", fig.width=6, fig.height=4}
+# focus on debt loan at the time of graduation
 debt <-
   ngs %>%
   mutate(debt_loan_at_grd = 
@@ -451,6 +475,7 @@ debt <-
   count(debt_loan_at_grd) %>%
   drop_na()
 
+# create a bar plot of the distribution of the amount of debt loan 
 debt %>%
   ggplot(mapping=aes(x=debt_loan_at_grd, y=n, fill=debt_loan_at_grd)) +
   geom_bar(stat="identity", na.rm=TRUE) +
@@ -466,6 +491,7 @@ It can be observed from Figure \@ref(fig:debt) that 31.19% of the respondents gr
 ## Transition into Labor Market
 
 ```{r related, echo=FALSE, fig.cap="Distribution of the respondents whether their job is related to the program", fig.width=6, fig.height=4}
+# focus on how much job is related to program
 related <-
   ngs %>%
   mutate(job_related_to_program = 
@@ -483,6 +509,7 @@ related <-
   count(job_related_to_program) %>%
   drop_na()
 
+# create a bar plot that shows the distribution of how much the job is related to the program
 related %>%
   ggplot(mapping=aes(x=job_related_to_program, y=n, fill=job_related_to_program)) +
   geom_bar(stat="identity") +
@@ -526,7 +553,7 @@ While most graduates did not take long to find the job after obtaining the degre
 
 ## Limitations and Weaknesses
 
-First, this paper only focuses on the program itself. Yet, throughout their education, there are lots of opportunities. There are many extra-curricular activities that are available such as clubs, workshops, conferences, job fairs, etc. In addition, students get to meet many people with all different backgrounds. However, this paper did not take those into consideration. The post-secondary institutions offer a lot more opportunities than what are being discussed in this paper, and these may have played a significant role in students finding their job. Therefore, there are some limitations in this paper. 
+First, this paper only focuses on the program itself. Yet, throughout their education, there are lots of opportunities. There are many extra-curricular activities that are available such as clubs, workshops, conferences, job fairs, etc. In addition, students get to meet many people with all different backgrounds. However, this paper did not take those into consideration. The post-secondary institutions offer a lot more opportunities than what are being discussed in this paper, and these may have played a significant role in students finding their job. Therefore, there are some limitations in this paper.
 
 On top of that, when fitting the model, we only considered co-op and work placement as relevant work experience. However, internship is another way to obtain relevant work experience, and in fact, it is the most common way to obtain relevant work experience among the students enrolled in post-secondary institutions since they usually require the candidates to be enrolled in a post-secondary institution. All the respondents who have done an internship answered that they worked during the program, but the variable includes the ones who worked but not in the relevant field that they want as their career. Thus, I could not include that variable while fitting the model. If there was one additional question which asked whether they interned, the model could have been more accurate.
 
